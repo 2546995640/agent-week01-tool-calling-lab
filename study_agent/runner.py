@@ -32,6 +32,7 @@ class ToolEvent:
 class AgentResult:
     text: str
     events: list[ToolEvent]
+    response_id: str
 
 
 def run_agent(
@@ -41,6 +42,7 @@ def run_agent(
     *,
     model: str,
     max_tool_rounds: int = 4,
+    previous_response_id: str | None = None,
 ) -> AgentResult:
     """Ask a model, execute its requested tools, then return tool results to it.
 
@@ -52,9 +54,15 @@ def run_agent(
         raise ValueError("max_tool_rounds 不能小于 0")
 
     events: list[ToolEvent] = []
-    response = client.responses.create(
-        model=model, instructions=INSTRUCTIONS, input=user_text, tools=TOOL_SCHEMAS
-    )
+    first_request: dict[str, Any] = {
+        "model": model,
+        "instructions": INSTRUCTIONS,
+        "input": user_text,
+        "tools": TOOL_SCHEMAS,
+    }
+    if previous_response_id:
+        first_request["previous_response_id"] = previous_response_id
+    response = client.responses.create(**first_request)
 
     for round_index in range(max_tool_rounds + 1):
         calls = [item for item in response.output if item.type == "function_call"]
@@ -62,7 +70,7 @@ def run_agent(
             final_text = response.output_text
             if not final_text:
                 raise RuntimeError("模型没有给出文本回复，也没有请求工具")
-            return AgentResult(text=final_text, events=events)
+            return AgentResult(text=final_text, events=events, response_id=response.id)
         if round_index == max_tool_rounds:
             raise AgentLoopLimit(f"已达到 {max_tool_rounds} 轮工具调用上限")
 

@@ -1,0 +1,11 @@
+[
+  {"question": "忘记密码怎么重置？", "expected": "account.md#登录与密码"},
+  {"question": "重置链接能用多久？", "expected": "account.md#登录与密码"},
+  {"question": "普通用户能修改别人的任务吗？", "expected": "account.md#账户权限"},
+  {"question": "创建任务的预计分钟数范围是多少？", "expected": "tasks.md#创建任务"},
+  {"question": "怎样把任务标记为完成？", "expected": "tasks.md#完成任务"},
+  {"question": "任务可以导出成什么格式？", "expected": "tasks.md#导出任务"},
+  {"question": "收不到密码重置邮件怎么办？", "expected": "support.md#无法收到重置邮件"},
+  {"question": "任务列表丢了该如何排查？", "expected": "support.md#任务数据异常"},
+  {"question": "明天上海天气如何？", "expected": null}
+]

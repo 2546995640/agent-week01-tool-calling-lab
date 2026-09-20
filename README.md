@@ -1,6 +1,20 @@
-# Week 01 · Tool Calling Lab
+# Agent Developer Internship Roadmap · 8 Week Lab
 
-> **学习路线标记：第 1 周 / 8 周。** 这是一个可运行、可测试的 Agent 入门项目。先理解工具调用，再进入下一周的状态管理与错误恢复。
+> **学习路线：Week 01–08。** 已有开发经验、每周约 20 小时可按本仓库推进；第 4 周开始投递实习。所有离线示例无需 API Key，真实模型路径保留为可选功能。
+
+## 从哪里开始
+
+| 阶段 | 核心内容 | 无密钥入口 |
+| --- | --- | --- |
+| [Week 01](docs/week01.md) | 工具调用 | `python -m study_agent demo` |
+| [Week 02](docs/week02.md) | 多轮状态 | `python -m study_agent demo-session` |
+| [Week 03–04](projects/doc_qa/README.md) | 文档问答与检索评测 | `python -m projects.doc_qa "忘记密码怎么重置？"` |
+| [Week 05–06](projects/issue_triage/README.md) | Issue 分诊与人工批准 | `python -m projects.issue_triage 101` |
+| [Week 07–08](docs/week07.md) | 评测、简历与面试 | 两个项目的 `eval.py`、[Week 08](docs/week08.md) |
+
+完整安排见 [8 周路线图](docs/roadmap.md)，按阶段筛选的热门开源示例见 [开源项目索引](docs/open-source-projects.md)。本仓库保留第 1 周的独立教程，方便从最小 Agent 循环读起。
+
+## Week 01 · 学习任务管理 Agent
 
 项目实现一个**学习任务管理 Agent**：用户用自然语言要求添加、查看或完成学习任务；模型选择工具，Python 程序校验参数、执行工具，再把结果交回模型生成回复。任务存储在本地 JSON 文件中。
 
@@ -82,4 +96,3 @@ python -m study_agent ask "完成任务 1" --trace
 - [Responses API 与工具调用](https://developers.openai.com/api/docs/guides/function-calling)
 - [结构化输出](https://developers.openai.com/api/docs/guides/structured-outputs)
 - [Agents SDK 快速开始](https://developers.openai.com/api/docs/guides/agents/quickstart)（第 2 周再尝试用 SDK 重写）
-

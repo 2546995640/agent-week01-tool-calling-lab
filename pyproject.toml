@@ -14,8 +14,11 @@ dependencies = ["openai>=2,<3", "pydantic>=2,<3"]
 dev = ["pytest>=7,<10"]
 
 [tool.setuptools.packages.find]
-include = ["study_agent*"]
+include = ["study_agent*", "projects*"]
+
+[tool.setuptools.package-data]
+"projects.doc_qa" = ["sample_docs/*.md", "cases.json", "README.md"]
+"projects.issue_triage" = ["runbook/*.md", "issues.json", "cases.json", "README.md"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-

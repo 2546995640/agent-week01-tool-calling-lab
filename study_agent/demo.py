@@ -9,6 +9,7 @@ from types import SimpleNamespace
 from typing import Any
 
 from .runner import run_agent
+from .session import SessionStore, run_session_turn
 from .toolbox import StudyStore
 
 
@@ -65,3 +66,30 @@ def run_demo() -> None:
                 print(f"工具结果：{json.dumps(event.output, ensure_ascii=False)}")
             print(f"助手：{result.text}")
         print("\n离线演示已结束；任务数据保存在临时目录，不会上传。")
+
+
+def run_session_demo() -> None:
+    """Show how the second user turn resumes the first response."""
+    class RecordingResponses(ScriptedResponses):
+        def __init__(self, responses: list[Any]):
+            super().__init__(responses)
+            self.requests: list[dict[str, Any]] = []
+
+        def create(self, **kwargs: Any) -> Any:
+            self.requests.append(kwargs)
+            return super().create(**kwargs)
+
+    with TemporaryDirectory() as directory:
+        root = Path(directory)
+        responses = RecordingResponses(
+            [text_response("turn_1", "第一轮：你好！"), text_response("turn_2", "第二轮：我们继续。")]
+        )
+        client = SimpleNamespace(responses=responses)
+        sessions = SessionStore(root / "sessions.json")
+        tasks = StudyStore(root / "tasks.json")
+        first = run_session_turn(client, "learning", "你好", tasks, sessions, model="offline-script")
+        second = run_session_turn(client, "learning", "接着说", tasks, sessions, model="offline-script")
+        print("第一轮：" + first.text)
+        print("本地保存的 response_id：" + first.response_id)
+        print("第二轮发送的 previous_response_id：" + responses.requests[1]["previous_response_id"])
+        print("第二轮：" + second.text)
